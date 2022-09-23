@@ -1,0 +1,14 @@
+.inbox-list-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: #f3f3f3;
+  padding: 1.2rem;
+  border: 1px solid #eee;
+  border-radius: 0.4rem;
+  cursor: pointer;
+
+  &--read {
+    opacity: 0.5;
+  }
+}

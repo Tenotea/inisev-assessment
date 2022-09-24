@@ -8,56 +8,52 @@
       </h1>
     </div>
 
-    <div class="inbox__actions-container">
-      <CheckBox
-        @update:checked="selectAllMessage"
-        :checked="selectedMessages.length === messages.length"
-      />
-      <BaseButton
-        @click="
-          markMessagesAsRead({ selectedMessages }), (selectedMessages = [])
-        "
-      >
-        Mark as read (r)
-      </BaseButton>
-      <BaseButton
-        @click="archiveMessages({ selectedMessages }), (selectedMessages = [])"
-      >
-        Archive (a)
-      </BaseButton>
-    </div>
+    <InboxActions
+      :selected-messages="selectedMessages"
+      :total-message-in-view="getInboxMessages.length"
+      @clear:selection="selectedMessages = []"
+      @select:all="selectAllMessage"
+    />
 
     <ul class="inbox__items-list">
       <InboxListItem
-        v-for="message in messages"
+        v-for="message in getInboxMessages"
         :key="message.id"
         :message="message"
         :selected="selectedMessages.includes(message.id)"
         @select="handleInboxSelect"
         @deselect="handleInboxDeselect"
+        @view="viewMessage"
       />
     </ul>
+
+    <InboxReader
+      v-if="messageInView"
+      :message="messageInView"
+      @exit="messageInView = null"
+    />
   </section>
 </template>
 
 <script lang="ts">
-import CheckBox from "../../components/form-controls/check-box/CheckBox.vue";
-import BaseButton from "../../components/buttons/base-button/BaseButton.vue";
 import InboxListItem from "../../components/list-items/inbox-list-item/InboxListItem.vue";
 import { defineComponent } from "vue";
-import { mapMutations, mapState } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import type { InboxItem } from "@/types/inbox.types";
+import InboxReader from "../../components/fragments/inbox-reader/InboxReader.vue";
+import InboxActions from "../../components/fragments/inbox-actions/InboxActions.vue";
 
 export default defineComponent({
   components: {
-    CheckBox,
-    BaseButton,
     InboxListItem,
+    InboxReader,
+    InboxActions,
   },
 
   data() {
     return {
       selectedMessages: [] as number[],
+      messageInView: null as InboxItem | null,
     };
   },
 
@@ -75,20 +71,21 @@ export default defineComponent({
 
     selectAllMessage(checked: boolean) {
       if (checked) {
-        this.selectedMessages = this.messages.map(
+        this.selectedMessages = this.getInboxMessages.map(
           (message: InboxItem) => message.id
         );
       } else {
         this.selectedMessages = [];
       }
     },
+
+    viewMessage(message: InboxItem) {
+      this.messageInView = message;
+    },
   },
 
   computed: {
-    ...mapState({
-      messages: (state: any) =>
-        state.messages.filter((message: InboxItem) => !message.archived),
-    }),
+    ...mapGetters(["getInboxMessages"]),
   },
 
   mounted() {

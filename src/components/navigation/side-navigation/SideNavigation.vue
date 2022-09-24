@@ -1,12 +1,14 @@
 <template>
   <aside class="side-navigation">
     <RouterLink to="/inbox">
-      <button class="side-navigation__item">Inbox ({{ inboxMessages }})</button>
+      <button class="side-navigation__item">
+        Inbox ({{ getInboxMessages.length }})
+      </button>
     </RouterLink>
 
     <RouterLink to="/archive">
       <button class="side-navigation__item">
-        Archive ({{ archivedMessages }})
+        Archive ({{ getArchivedMessage.length }})
       </button>
     </RouterLink>
 
@@ -21,18 +23,8 @@ import { defineComponent } from "vue";
 import { mapGetters } from "vuex";
 
 export default defineComponent({
-  methods: {
-    ...mapGetters(["getArchivedMessage", "getInboxMessages"]),
-  },
-
   computed: {
-    inboxMessages() {
-      return this.getInboxMessages().length;
-    },
-
-    archivedMessages() {
-      return this.getArchivedMessage().length;
-    },
+    ...mapGetters(["getArchivedMessage", "getInboxMessages"]),
   },
 });
 </script>

@@ -1,12 +1,12 @@
 <template>
   <li
+    @click="onItemView"
     :class="[
       'inbox-list-item',
       message.read && !selected ? 'inbox-list-item--read' : '',
     ]"
-    @click="onItemSelect"
   >
-    <CheckBox :checked="selected" />
+    <CheckBox :checked="selected" @update:checked="onItemSelect" />
     {{ message.title }}
   </li>
 </template>
@@ -18,7 +18,7 @@ import type { InboxItem } from "../../../types/inbox.types";
 import CheckBox from "../../../components/form-controls/check-box/CheckBox.vue";
 
 export default defineComponent({
-  emits: ["select", "deselect"],
+  emits: ["select", "deselect", "view"],
   props: {
     message: {
       type: Object as PropType<InboxItem>,
@@ -42,10 +42,14 @@ export default defineComponent({
         this.$emit("deselect", this.message.id);
       }
     },
+
+    onItemView() {
+      this.$emit("view", this.message);
+    },
   },
 });
 </script>
 
-<style lang="scss" scoped>
+<style>
 @import "./InboxListItem.scss";
 </style>

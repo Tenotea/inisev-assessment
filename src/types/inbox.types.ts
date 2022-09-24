@@ -3,4 +3,5 @@ export interface InboxItem {
   title: string;
   read: boolean;
   archived: boolean;
+  message: string;
 }

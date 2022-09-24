@@ -11,6 +11,7 @@
           disable-select-all
           :selected-messages="[message.id]"
           :total-message-in-view="1"
+          @clear:selection="$emit('exit')"
         />
 
         <h1 class="inbox-reader__message-title">

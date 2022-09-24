@@ -2,7 +2,9 @@
   <div class="inbox-actions">
     <CheckBox
       v-if="!disableSelectAll"
-      @update:checked="$emit('select:all')"
+      @update:checked="
+        $emit('select:all', selectedMessages.length !== totalMessageInView)
+      "
       :checked="selectedMessages.length === totalMessageInView"
     />
     <BaseButton

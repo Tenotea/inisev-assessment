@@ -34,6 +34,10 @@ export default defineComponent({
     CheckBox,
   },
 
+  created () {
+    console.log(this.message)
+  },
+
   methods: {
     onItemSelect() {
       if (!this.selected) {
@@ -50,6 +54,6 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style lang="scss">
 @import "./InboxListItem.scss";
 </style>

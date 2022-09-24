@@ -1,13 +1,14 @@
 <template>
-  <li
-    @click="onItemView"
-    :class="[
-      'inbox-list-item',
-      message.read && !selected ? 'inbox-list-item--read' : '',
-    ]"
-  >
+  <li :class="`inbox-list-item ${opacify ? 'inbox-list-item--read' : ''}`">
     <CheckBox :checked="selected" @update:checked="onItemSelect" />
-    {{ message.title }}
+    <p
+      @click="onItemView"
+      :class="`inbox-list-item__title ${
+        message.read && !selected ? 'inbox-list-item__title--read' : ''
+      }`"
+    >
+      {{ message.title }}
+    </p>
   </li>
 </template>
 
@@ -45,6 +46,12 @@ export default defineComponent({
 
     onItemView() {
       this.$emit("view", this.message);
+    },
+  },
+
+  computed: {
+    opacify() {
+      return this.message.read && !this.selected;
     },
   },
 });

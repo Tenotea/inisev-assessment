@@ -1,14 +1,24 @@
 .inbox-list-item {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  padding-left: 1.2rem;
   background: #f3f3f3;
-  padding: 1.2rem;
   border: 1px solid #eee;
+  gap: 1.5rem;
   border-radius: 0.4rem;
   cursor: pointer;
-
+  
   &--read {
-    opacity: 0.5;
+    background: rgba(243, 243, 243, 0.5);
+    border: 1px solid rgba(238, 238, 238, 0.5);
+  }
+  
+  &__title {
+    padding: 1.2rem 1.2rem 1.2rem 0;
+    flex-grow: 1;
+
+    &--read {
+      opacity: 0.5;
+    }
   }
 }

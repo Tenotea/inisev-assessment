@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import InboxView from "../views/inbox-view/InboxView.vue";
+import InboxView from "../views/InboxView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,7 +16,7 @@ const router = createRouter({
     {
       path: "/archive",
       name: "archive",
-      component: () => import("../views/archive-view/ArchiveView.vue"),
+      component: () => import("../views/ArchiveView.vue"),
     },
   ],
 });

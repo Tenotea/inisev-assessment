@@ -1,7 +1,7 @@
 <template>
   <section class="inbox">
     <div class="inbox__heading">
-      <h5 class="inbox__title--primary">Inbox</h5>
+      <h5 class="inbox__title--primary">{{ $route.name }}</h5>
       <h1 class="inbox__title--secondary">
         Emails Selected
         {{ selectedMessages.length > 0 ? `(${selectedMessages.length})` : "" }}
@@ -10,14 +10,14 @@
 
     <InboxActions
       :selected-messages="selectedMessages"
-      :total-message-in-view="getInboxMessages.length"
+      :total-message-in-view="messages.length"
       @clear:selection="selectedMessages = []"
       @select:all="selectAllMessage"
     />
 
     <ul class="inbox__items-list">
       <InboxListItem
-        v-for="message in getInboxMessages"
+        v-for="message in messages"
         :key="message.id"
         :message="message"
         :selected="selectedMessages.includes(message.id)"
@@ -36,18 +36,25 @@
 </template>
 
 <script lang="ts">
-import InboxListItem from "../../components/list-items/inbox-list-item/InboxListItem.vue";
-import { defineComponent } from "vue";
-import { mapGetters, mapMutations } from "vuex";
+import { defineComponent, type PropType } from "vue";
+import { mapMutations } from "vuex";
 import type { InboxItem } from "@/types/inbox.types";
-import InboxReader from "../../components/fragments/inbox-reader/InboxReader.vue";
-import InboxActions from "../../components/fragments/inbox-actions/InboxActions.vue";
+import InboxActions from "../../fragments/inbox-actions/InboxActions.vue";
+import InboxListItem from "../../list-items/inbox-list-item/InboxListItem.vue";
+import InboxReader from "../../fragments/inbox-reader/InboxReader.vue";
 
 export default defineComponent({
+  props: {
+    messages: {
+      type: Array as PropType<InboxItem[]>,
+      required: true,
+    },
+  },
+
   components: {
+    InboxActions,
     InboxListItem,
     InboxReader,
-    InboxActions,
   },
 
   data() {
@@ -71,7 +78,7 @@ export default defineComponent({
 
     selectAllMessage(checked: boolean) {
       if (checked) {
-        this.selectedMessages = this.getInboxMessages.map(
+        this.selectedMessages = this.messages.map(
           (message: InboxItem) => message.id
         );
       } else {
@@ -82,10 +89,6 @@ export default defineComponent({
     viewMessage(message: InboxItem) {
       this.messageInView = message;
     },
-  },
-
-  computed: {
-    ...mapGetters(["getInboxMessages"]),
   },
 
   mounted() {
@@ -105,5 +108,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "./InboxView.scss";
+@import "./PageLayout.scss";
 </style>
